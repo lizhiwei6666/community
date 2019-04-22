@@ -15,6 +15,24 @@ public class Charge implements Serializable {
     private Integer del;
     private Integer userId;
     private Integer housingId;
+    private String housingName;
+    private String userName;
+
+    public String getHousingName() {
+        return housingName;
+    }
+
+    public void setHousingName(String housingName) {
+        this.housingName = housingName;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
     public Integer getId() {
         return id;

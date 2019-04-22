@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.cmmunity.housing.mapper.HousingMapper">
+<insert id="addHousing">
+    INSERT INTO `propertydb`.`housing` (
+  `id`,
+  `housing_name`,
+  `housing_address`,
+  `status`,
+  `property_company`
+)
+VALUES
+  (
+    NULL,
+    #{housingName},
+    #{housingAddress},
+    0,
+    #{propertyCompany}
+  ) ;
+
+</insert>
+<update id="updateHousing">
+    UPDATE
+  `propertydb`.`housing`
+<trim prefix="set" suffixOverrides=",">
+    <if test="housingName!=null and housingName!=''">
+        `housing_name` = #{housingName},
+    </if>
+    <if test="housingAddress!=null and housingAddress!=''">
+        `housing_address` = #{housingAddress},
+    </if>
+    <if test="status!=null">
+        `status` = #{status},
+    </if>
+    <if test="propertyCompany!=null and propertyCompany!=''">
+        `property_company` =  #{propertyCompany},
+    </if>
+</trim>
+    WHERE `id` = #{id} ;
+</update>
+<update id="delHousing" >
+    UPDATE housing SET  del=1  WHERE id=#{id}
+</update>
+    <resultMap id="housingMap" type="cn.cmmunity.beans.Housing">
+        <id column="id" property="id" />
+        <result column="housing_name" property="housingName"/>
+        <result column="housing_address" property="housingAddress"/>
+        <result column="property_company" property="propertyCompany"/>
+        <result column="status" property="status" />
+    </resultMap>
+    <select id="getHousingPage" resultMap="housingMap">
+        SELECT *
+          FROM housing
+        limit #{pageIndex},#{pageSize}
+    </select>
+    <select id="getHousingCount" resultType="int">
+        SELECT count(1) FROM  housing
+    </select>
+    <select id="getHousing" resultMap="housingMap">
+         SELECT *
+           FROM housing
+          WHERE id=#{id}
+    </select>
+</mapper>

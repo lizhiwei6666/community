@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.cmmunity.housing.mapper.ChargeMapper">
+    <insert id="addCharge">
+INSERT INTO `propertydb`.`charge` (
+  `id`,
+  `payment_time`,
+  `money`,
+  `payment_type`,
+  `payment_status`,
+  `del`,
+  `userid`,
+  `housing_id`
+)
+VALUES
+  (
+    NULL ,
+    now(),
+    #{money},
+    #{paymentType},
+    #{paymentStatus},
+    #{del},
+    #{userId},
+    #{housingId}
+  ) ;
+
+    </insert>
+    <update id="updateCharge">
+        UPDATE
+  `propertydb`.`charge`
+<trim prefix="set" suffixOverrides=",">
+    <if test="paymentTime!=null">
+        `payment_time` = #{paymentTime},
+    </if>
+    <if test="money!=null">
+        `money` = #{money},
+    </if>
+    <if test="paymentType!=null">
+        `payment_type` = #{payment_type},
+    </if>
+    <if test="paymentStatus!=null">
+        `payment_status` = #{paymentStatus},
+    </if>
+    <if test="del!=null">
+        `del` = #{del},
+    </if>
+    <if test="userId!=null">
+        `userid` = #{userId},
+    </if>
+    <if test="housingId!=null">
+        `housing_id` = #{housingId},
+    </if>
+</trim>
+WHERE `id` = #{id} ;
+    </update>
+    <update id="delCharge">
+         UPDATE charge SET `del`=1 WHERE id=#{id}
+    </update>
+    <resultMap id="chargeMap" type="cn.cmmunity.beans.Charge">
+        <id column="id" property="id"/>
+        <result column="" property="del"/>
+        <result column="" property="housingId"/>
+        <result column="" property="userId"/>
+        <result column="" property="userName"/>
+        <result column="" property="housingName"/>
+        <result column="" property="paymentTime"/>
+        <result column="" property="money"/>
+        <result column="" property="paymentType"/>
+        <result column="" property="paymentStatus"/>
+    </resultMap>
+
+    <select id="getChargePage" resultMap="chargeMap">
+        SELECT *
+          FROM `charge`,`user`,`housing`,`paymenttype`
+         WHERE charge.`userid`=user.`id` AND charge.`housing_id`=housing.`id` AND charge.`payment_type`=paymenttype.`id`
+        <if test="name!=null and name!=''">
+            AND user.`name` LIKE CONCAT('%',#{name},'%')
+        </if>
+        <if test="housingId!=null">
+            AND housing.`id`=#{housingId}
+        </if>
+        <if test="paymentType!=null">
+            AND paymenttype.`id`=#{paymentType}
+        </if>
+        <if test="paymentStatus!=null">
+            AND charge.`payment_status`=#{paymentStatus}
+        </if>
+        limit #{pageIndex},#{pageSize}
+    </select>
+    <select id="getChargeCount" resultType="int">
+        SELECT COUNT(1)
+          FROM `charge`,`user`,`housing`,`paymenttype`
+         WHERE charge.`userid`=user.`id` AND charge.`housing_id`=housing.`id` AND charge.`payment_type`=paymenttype.`id`
+                <if test="name!=null and name!=''">
+                    AND user.`name` LIKE CONCAT('%',#{name},'%')
+                </if>
+                <if test="housingId!=null">
+                    AND housing.`id`=#{housingId}
+                </if>
+                <if test="paymentType!=null">
+                    AND paymenttype.`id`=#{paymentType}
+                </if>
+                <if test="paymentStatus!=null">
+                    AND charge.`payment_status`=#{paymentStatus}
+                </if>
+    </select>
+    <select id="getChargeById" resultMap="chargeMap">
+        SELECT *
+          FROM `charge`,`user`,`housing`,`paymenttype`
+         WHERE charge.`userid`=user.`id` AND charge.`housing_id`=housing.`id` AND charge.`payment_type`=paymenttype.`id`
+           AND  charge.`id`=#{id}
+    </select>
+</mapper>
