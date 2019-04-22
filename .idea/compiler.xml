@@ -7,11 +7,13 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="beans" />
+        <module name="housing" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="beans" target="1.7" />
       <module name="community" target="1.5" />
+      <module name="housing" target="1.7" />
     </bytecodeTargetLevel>
   </component>
 </project>
