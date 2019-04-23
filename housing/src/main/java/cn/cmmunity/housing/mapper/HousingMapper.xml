@@ -52,7 +52,6 @@ VALUES
     <select id="getHousingPage" resultMap="housingMap">
         SELECT *
           FROM housing
-        limit #{pageIndex},#{pageSize}
     </select>
     <select id="getHousingCount" resultType="int">
         SELECT count(1) FROM  housing

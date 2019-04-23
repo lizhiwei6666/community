@@ -17,7 +17,25 @@ public class Charge implements Serializable {
     private Integer housingId;
     private String housingName;
     private String userName;
+    private Date generationTime;
 
+    public Date getGenerationTime() {
+        return generationTime;
+    }
+
+    public void setGenerationTime(Date generationTime) {
+        this.generationTime = generationTime;
+    }
+
+    public String getPaymentTypeName() {
+        return paymentTypeName;
+    }
+
+    public void setPaymentTypeName(String paymentTypeName) {
+        this.paymentTypeName = paymentTypeName;
+    }
+
+    private String paymentTypeName;
     public String getHousingName() {
         return housingName;
     }

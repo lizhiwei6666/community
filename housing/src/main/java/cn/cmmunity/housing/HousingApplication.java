@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
 @SpringBootApplication
-@MapperScan(value = "com.cmmunity.housing.mapper")
+@MapperScan(value = "cn.cmmunity.housing.mapper")
 public class HousingApplication {
 
 	public static void main(String[] args) {

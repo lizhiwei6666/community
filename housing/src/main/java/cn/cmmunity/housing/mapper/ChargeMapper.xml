@@ -59,19 +59,20 @@ WHERE `id` = #{id} ;
     </update>
     <resultMap id="chargeMap" type="cn.cmmunity.beans.Charge">
         <id column="id" property="id"/>
-        <result column="" property="del"/>
-        <result column="" property="housingId"/>
-        <result column="" property="userId"/>
-        <result column="" property="userName"/>
-        <result column="" property="housingName"/>
-        <result column="" property="paymentTime"/>
-        <result column="" property="money"/>
-        <result column="" property="paymentType"/>
-        <result column="" property="paymentStatus"/>
+        <result column="del" property="del"/>
+        <result column="housing_id" property="housingId"/>
+        <result column="userid" property="userId"/>
+        <result column="username" property="userName"/>
+        <result column="housingName" property="housingName"/>
+        <result column="payment_time" property="paymentTime"/>
+        <result column="money" property="money"/>
+        <result column="payment_type" property="paymentType"/>
+        <result column="paymentTypeName" property="paymentTypeName"/>
+        <result column="payment_status" property="paymentStatus"/>
     </resultMap>
 
     <select id="getChargePage" resultMap="chargeMap">
-        SELECT *
+        SELECT charge.*,housing.`id` AS housing_id,user.`id` AS userid,user.`name` AS username,housing.`housing_name` AS housingName,paymenttype.`paymentTypeName` AS paymentTypeName
           FROM `charge`,`user`,`housing`,`paymenttype`
          WHERE charge.`userid`=user.`id` AND charge.`housing_id`=housing.`id` AND charge.`payment_type`=paymenttype.`id`
         <if test="name!=null and name!=''">
@@ -86,7 +87,7 @@ WHERE `id` = #{id} ;
         <if test="paymentStatus!=null">
             AND charge.`payment_status`=#{paymentStatus}
         </if>
-        limit #{pageIndex},#{pageSize}
+
     </select>
     <select id="getChargeCount" resultType="int">
         SELECT COUNT(1)

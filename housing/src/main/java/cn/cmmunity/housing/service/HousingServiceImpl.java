@@ -5,12 +5,13 @@ import cn.cmmunity.housing.mapper.HousingMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 
 @Service
 public class HousingServiceImpl implements  HousingService {
-    @Autowired
+    @Resource(name = "housingMapper")
     HousingMapper housingMapper;
 
     @Override
