@@ -11,18 +11,20 @@ INSERT INTO `propertydb`.`charge` (
   `payment_status`,
   `del`,
   `userid`,
-  `housing_id`
+  `housing_id`,
+  `generation_time`
 )
 VALUES
   (
     NULL ,
-    now(),
+    #{paymentTime},
     #{money},
     #{paymentType},
     #{paymentStatus},
     #{del},
     #{userId},
-    #{housingId}
+    #{housingId},
+    now()
   ) ;
 
     </insert>
@@ -33,11 +35,11 @@ VALUES
     <if test="paymentTime!=null">
         `payment_time` = #{paymentTime},
     </if>
-    <if test="money!=null">
+    <if test="money!=null and money!=''">
         `money` = #{money},
     </if>
     <if test="paymentType!=null">
-        `payment_type` = #{payment_type},
+        `payment_type` = #{paymentType},
     </if>
     <if test="paymentStatus!=null">
         `payment_status` = #{paymentStatus},
@@ -112,4 +114,5 @@ WHERE `id` = #{id} ;
          WHERE charge.`userid`=user.`id` AND charge.`housing_id`=housing.`id` AND charge.`payment_type`=paymenttype.`id`
            AND  charge.`id`=#{id}
     </select>
+
 </mapper>

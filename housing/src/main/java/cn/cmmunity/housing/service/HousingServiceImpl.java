@@ -15,6 +15,11 @@ public class HousingServiceImpl implements  HousingService {
     HousingMapper housingMapper;
 
     @Override
+    public Housing getHousingById(Integer id) {
+        return housingMapper.getHousingById(id);
+    }
+
+    @Override
     public int addHousing(Housing housing) {
         return housingMapper.addHousing(housing);
     }

@@ -3,12 +3,14 @@ package cn.cmmunity.housing.controller;
 import cn.cmmunity.beans.Housing;
 import cn.cmmunity.beans.RespBean;
 import cn.cmmunity.housing.service.HousingService;
+import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonArrayFormatVisitor;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.spring.web.json.Json;
 
 import java.util.HashMap;
 import java.util.List;
@@ -66,5 +68,12 @@ public class HousingController {
        /* map.put("list",list);*/
         return map;
     }
+   /* @RequestMapping(value = "/getHousing/{id}",method = RequestMethod.GET)
+    @ApiOperation(value = "查询小区方法",httpMethod ="GET",
+            protocols = "HTTP", notes = "根据id查询小区方法")
+    public Object delHousing(@PathVariable Integer id){
+        Housing housing=housingService.getHousingById(id);
+        return housing;
+    }*/
 
 }

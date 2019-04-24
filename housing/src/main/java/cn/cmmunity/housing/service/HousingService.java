@@ -7,6 +7,13 @@ import java.util.Map;
 
 public interface HousingService {
     /**
+     * 根据id查询小区方法
+     * @param id
+     * @return
+     */
+    Housing getHousingById(Integer id);
+
+    /**
      * 新增小区方法
      * @param housing
      * @return

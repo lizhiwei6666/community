@@ -9,7 +9,8 @@ public interface HousingMapper {
     int addHousing(Housing housing);
     int updateHousing(Housing housing);
     int delHousing(Integer id);
-    Housing getHousing(Integer id);
+    Housing getHousingById(Integer id);
     List<Housing> getHousingPage(Map<String,Object> parm);
     int getHousingCount();
+
 }

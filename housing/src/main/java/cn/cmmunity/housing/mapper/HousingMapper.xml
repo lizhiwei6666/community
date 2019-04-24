@@ -8,7 +8,8 @@
   `housing_name`,
   `housing_address`,
   `status`,
-  `property_company`
+  `property_company`,
+  `del`
 )
 VALUES
   (
@@ -16,7 +17,8 @@ VALUES
     #{housingName},
     #{housingAddress},
     0,
-    #{propertyCompany}
+    #{propertyCompany},
+    0
   ) ;
 
 </insert>
@@ -56,9 +58,10 @@ VALUES
     <select id="getHousingCount" resultType="int">
         SELECT count(1) FROM  housing
     </select>
-    <select id="getHousing" resultMap="housingMap">
+    <select id="getHousingById" resultMap="housingMap">
          SELECT *
            FROM housing
           WHERE id=#{id}
     </select>
+
 </mapper>
