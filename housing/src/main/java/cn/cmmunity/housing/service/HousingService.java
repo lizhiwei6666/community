@@ -33,6 +33,8 @@ public interface HousingService {
      */
     int delHousing(Integer id);
 
+    int del(Integer id);
+
     /**
      * 小区分页查询
      * @param parm

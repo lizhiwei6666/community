@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="/Bootstrap/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Font Awesome -->
+    <link href="/Bootstrap/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <!--[if IE 7]>-->
+</head>
+<body>
+<div style="height: 20px"></div>
+<form class="form-horizontal" id="main"  action="/charge/addCharge" method="post">
+    <div class="form-group form-group-sm">
+        <label  for="housingId" class="col-sm-2 control-label">所属物小区</label>
+        <div class="col-sm-3">
+            <select  class="form-control" name="housingId" id="housingId" style="float: left">
+                <option selected="selected" value="">请选择小区</option>
+                <option th:each="housing:${housingList}"  th:value="${housing.id}" th:text="${housing.housingName}"></option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group form-group-sm">
+        <label for="address" class="col-sm-2 control-label">房源地址</label>
+        <div class="col-sm-3">
+            <input type="text" required="required" value="" class="form-control" name="address" id="address" placeholder="请输入小区名称">
+        </div>
+    </div>
+    <div class="form-group form-group-sm">
+        <label for="userName" class="col-sm-2 control-label">业主名称</label>
+        <div class="col-sm-3">
+            <input type="text" required="required" value="" class="form-control" name="userName" id="userName" placeholder="请输入业主名称">
+        </div>
+    </div>
+    <div class="form-group form-group-sm">
+        <label  for="paymentType" class="col-sm-2 control-label">缴费类型</label>
+        <div class="col-sm-3">
+            <select  class="form-control" name="paymentType" id="paymentType" style="float: left">
+                <option selected="selected" value="">请选择缴费类型</option>
+                <option th:each="paymentType:${paymentTypeList}"  th:value="${paymentType.id}" th:text="${paymentType.paymentTypeName}"></option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group form-group-sm">
+        <label for="money" class="col-sm-2 control-label">缴费金额</label>
+        <div class="col-sm-3">
+            <input type="text" required="required" value=""  class="form-control" name="money" id="money" placeholder="请输入缴费金额">
+        </div>
+    </div>
+    <div class="form-group form-group-sm">
+        <label for="paymentTime" class="col-sm-2 control-label">缴费时间</label>
+        <div class="col-sm-3">
+            <input type="text"  value=""  class="form-control" name="paymentTime" id="paymentTime" placeholder="请输入缴费时间">
+        </div>
+    </div>
+    <div class="form-group form-group-sm">
+        <label for="paymentStatus" class="col-sm-2 control-label">支付状态</label>
+        <div class="col-sm-3">
+            <select class="form-control" id="paymentStatus" name="paymentStatus" style="float: left">
+                <option selected="selected" value="">请选择支付状态</option>
+                <option value="0" >未支付</option>
+                <option value="1" >已支付</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group form-group-sm">
+        <div class="col-sm-offset-2 col-sm-5">
+            <button type="submit" class="btn btn-success ">添加缴费账单</button>
+            <button type="button" onclick="back()" class="btn btn-default">返回</button>
+        </div>
+    </div>
+</form>
+<script type="text/javascript" src="/Bootstrap/jquery.min.js"></script>
+<script>
+    function back() {
+        window.history.back();
+    }
+    $(function () {
+        var flg='false';
+        $("#userName").blur(function () {
+            var name=$("#userName").val();
+            $.ajax({
+                url: '/charge/getUserByName',
+                data:'name='+name,
+                type:'GET',
+                dataType:'json',
+                async: false,
+                success:function (data){
+                    if(data.result=="true"){
+                        flg='true';
+                    }else {
+                        alert("业主不存在哦");
+                    }
+                }
+
+            });
+        })
+        $("#main").submit(function () {
+            /* $.getJSON("/charge/getUserByName?name="+name,function (data) {
+                 if(data.result=="true"){
+                     flg='true';
+                 }
+
+             })*/
+            if($("#userName").val()==name||$("#userName").val()==name){
+                alert("业主名不能为空");
+                return false;
+            }else if(flg=='false'){
+                alert("业主不存在哦");
+                return false;
+            }else if(null==$("#address").val()||''==$("#address").val()){
+                alert("房源地址不能为空");
+                return false;
+            }else if(null==$("#paymentType").val()||''==$("#paymentType").val()){
+                alert("缴费类型不能为空");
+                return false;
+            }else if(null==$("#paymentStatus").val()||''==$("#paymentStatus").val()){
+                alert("缴费类型不能为空");
+                return false;
+            }else if(null==$("#housingId").val()||''==$("#housingId").val()){
+                alert("所属小区不能为空");
+                return false;
+            }
+        })
+    })
+
+</script>
+<script src="/Bootstrap/ace/js/ace-extra.min.js"></script>
+<script src="/Bootstrap/ace/js/ace.min.js"></script>
+</body>
+</html>

@@ -43,4 +43,12 @@ public class HousingServiceImpl implements  HousingService {
     public int getHousingCount() {
         return housingMapper.getHousingCount();
     }
+
+    @Override
+    public int del(Integer id) {
+        Housing housing=new Housing();
+        housing.setId(id);
+        housingMapper.del(housing);
+        return housing.getResult();
+    }
 }

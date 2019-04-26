@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="/Bootstrap/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Font Awesome -->
+    <link href="/Bootstrap/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <!--[if IE 7]>
+    <link href="/Content/font-awesome/css/font-awesome-ie7.min.css" rel="stylesheet" />-->
+    <style>
+        th{
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+<div style="height: 20px"></div>
+<form action="/housing/getHousing" method="post">
+    <input type="hidden" name="pageIndex" th:value="1">
+    <p style="text-align: right"><button type="button" class="btn btn-success btn-group-sm" onclick="toadd()">添加小区</button></p>
+<table class="table table-hover ">
+    <tr>
+        <th>小区名称</th>
+        <th>小区地址</th>
+        <th>物业公司</th>
+        <th>状态</th>
+        <th>操作</th>
+    </tr>
+    <tr th:each="housing:${pageInfo.getList()}">
+        <td th:text="${housing.housingName}"></td>
+        <td th:text="${housing.housingAddress}"></td>
+        <td th:text="${housing.propertyCompany}"></td>
+        <td>
+            <span th:if="${housing.status==0}">正常</span>
+            <span th:if="${housing.status==1}">异常</span>
+        </td>
+        <td>
+            <button type="button" th:id="${housing.id}" th:onclick="'javascript:toupdate('+${housing.id}+');'" class="btn btn-info">修改</button>
+            <button type="button" th:onclick="'javascript:del('+${housing.id}+');'" class="btn btn-danger">删除</button>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="5">
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    <li>
+                        <a th:href="@{'javascript:page(document.forms[0],'+${pageInfo.getFirstPage()}+');'}"  aria-label="Previous">
+                            <span  aria-hidden="true">首页</span>
+                        </a>
+                    </li>
+                    <li th:class="${pageInfo.getPageNum()>1}? '':'disabled'">
+                        <a th:href="@{'javascript:page(document.forms[0],'+${pageInfo.getPrePage()}+');'}"  aria-label="Previous">
+                            <span  aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li th:each="iterStat : ${#numbers.sequence(1,pageInfo.getNavigateLastPage())}">
+                        <a th:class="${pageInfo.getPageNum()==iterStat}? 'active':'' " th:href="@{'javascript:page(document.forms[0],'+${iterStat}+');'}" th:text="${iterStat}"></a>
+                    </li>
+                    <li th:class="${pageInfo.getPageNum()<pageInfo.getNavigateLastPage()}? '':'disabled'">
+                        <a th:href="@{'javascript:page(document.forms[0],'+${pageInfo.getNextPage()}+');'}"  aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a th:href="@{'javascript:page(document.forms[0],'+${pageInfo.getLastPage()}+');'}"  aria-label="Previous">
+                            <span  aria-hidden="true">尾页</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </td>
+    </tr>
+</table>
+</form>
+<script type="text/javascript" src="/Bootstrap/jquery.min.js"></script>
+<script>
+    function del(id) {
+        if(confirm('确定要删除小区吗？')){
+            $.ajax({
+                url:"/housing/delHousing/"+id,
+                type:"DELETE",
+                dataType:'json',
+                success:function (data) {
+                    if(data.result=="true"){
+                        alert('删除成功！');
+                        $("#"+id).parent().parent().remove();
+                    }else if(data.result=="false"){
+                        alert('该小区还有业主入住，目前不能删除哦。');
+                    }
+                    else{
+                        alert('删除失败！');
+                    }
+                }
+
+            })
+        }
+
+    }
+    function toupdate(id) {
+        window.location.href='/housing/getHousing/'+id;
+    }
+    function page(frm,pageNum) {
+        frm.pageIndex.value=pageNum;
+        frm.submit();
+    }
+    function toadd() {
+        window.location.href='/addhousing';
+    }
+
+</script>
+<script src="/Bootstrap/ace/js/ace-extra.min.js"></script>
+<script src="/Bootstrap/ace/js/ace.min.js"></script>
+</body>
+</html>

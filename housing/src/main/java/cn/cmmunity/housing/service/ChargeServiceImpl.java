@@ -1,6 +1,8 @@
 package cn.cmmunity.housing.service;
 
 import cn.cmmunity.beans.Charge;
+import cn.cmmunity.beans.PaymentType;
+import cn.cmmunity.beans.User;
 import cn.cmmunity.housing.mapper.ChargeMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,11 @@ public class ChargeServiceImpl implements ChargeService {
     @Override
     public int addCharge(Charge charge) {
         return chargeMapper.addCharge(charge);
+    }
+
+    @Override
+    public List<PaymentType> getAllPaymentType() {
+        return chargeMapper.getAllPaymentType();
     }
 
     @Override
@@ -42,6 +49,11 @@ public class ChargeServiceImpl implements ChargeService {
 
     @Override
     public Charge getChargeById(Integer id) {
-        return null;
+        return chargeMapper.getChargeById(id);
+    }
+
+    @Override
+    public User getUserByName(String name) {
+        return chargeMapper.getUserByName(name);
     }
 }

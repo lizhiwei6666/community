@@ -29,6 +29,7 @@
                 a.append(icon);
                 a.append(text);
                 if (item.menus&&item.menus.length>0) {
+                    /*a.attr('href', item.url);*/
                     a.attr('href', '#');
                     a.addClass('dropdown-toggle');
                     var arrow = $('<b></b>');
@@ -42,6 +43,7 @@
                 }
                 else {
                     var href = 'javascript:addTabs({id:\'' + item.id + '\',title: \'' + item.text + '\',close: true,url: \'' + item.url + '\'});';
+                  /*  a.attr('href', item.url);*/
                     a.attr('href', href);
                     //if (item.istab)
                     //    a.attr('href', href);

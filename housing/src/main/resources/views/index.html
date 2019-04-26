@@ -20,7 +20,8 @@
     <script th:src="@{Bootstrap/jquery-1.9.1.min.js}"></script>
     <script th:src="@{Bootstrap/bootstrap/js/bootstrap.min.js}"></script>
     <script th:src="@{Bootstrap/sidebar-menu/sidebar-menu.js}"></script>
-    <script th:src="@{Bootstrap/bootstrap/js/bootstrap-tab.js}"></script> <style type="text/css">
+    <script th:src="@{Bootstrap/bootstrap/js/bootstrap-tab.js}"></script>
+    <style type="text/css">
     body {
         font-size: 12px;
     }
@@ -213,19 +214,19 @@
                         id: '2',
                         text: '查看缴费信息',
                         icon: 'icon-glass',
-                        url: ''
+                        url: '/charge/getCharge'
                     }]
                 },
                 {
                     id: '4',
                     text: '小区管理',
                     icon: 'glyphicon glyphicon-home',
-                    url: '',
+                    url: '/housing/getHousing',
                     menus: [{
                         id: '2',
                         text: '查看小区信息',
                         icon: 'icon-glass',
-                        url: ''
+                        url: '/housing/getHousing'
                     }]
                 },
                 {
@@ -290,6 +291,7 @@
                 $("#sidebar").attr("class", "sidebar display");
             }
         });
+
     });
 </script>
 <script th:src="@{Bootstrap/ace/js/ace-extra.min.js}"></script>

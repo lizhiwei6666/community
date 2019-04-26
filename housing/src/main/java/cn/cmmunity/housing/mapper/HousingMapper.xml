@@ -24,26 +24,30 @@ VALUES
 </insert>
 <update id="updateHousing">
     UPDATE
-  `propertydb`.`housing`
+     housing
 <trim prefix="set" suffixOverrides=",">
     <if test="housingName!=null and housingName!=''">
-        `housing_name` = #{housingName},
+        `housing_name`=#{housingName},
     </if>
     <if test="housingAddress!=null and housingAddress!=''">
-        `housing_address` = #{housingAddress},
+        `housing_address`=#{housingAddress},
     </if>
     <if test="status!=null">
-        `status` = #{status},
+        `status`=#{status},
     </if>
     <if test="propertyCompany!=null and propertyCompany!=''">
-        `property_company` =  #{propertyCompany},
+        `property_company`=#{propertyCompany},
     </if>
 </trim>
-    WHERE `id` = #{id} ;
+    WHERE `id`=#{id} ;
 </update>
 <update id="delHousing" >
     UPDATE housing SET  del=1  WHERE id=#{id}
 </update>
+<select id="del" statementType="CALLABLE">
+    call delhousing(#{housing.id,mode=IN},#{housing.result,mode=OUT,jdbcType=INTEGER})
+</select>
+
     <resultMap id="housingMap" type="cn.cmmunity.beans.Housing">
         <id column="id" property="id" />
         <result column="housing_name" property="housingName"/>
@@ -54,6 +58,8 @@ VALUES
     <select id="getHousingPage" resultMap="housingMap">
         SELECT *
           FROM housing
+          WHERE del=0
+          ORDER BY id desc
     </select>
     <select id="getHousingCount" resultType="int">
         SELECT count(1) FROM  housing

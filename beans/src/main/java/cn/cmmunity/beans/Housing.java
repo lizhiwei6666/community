@@ -11,6 +11,16 @@ public class Housing implements Serializable {
     private String housingAddress;
     private Integer status;
     private String propertyCompany;
+    //用来接收存储过程返回值
+    private Integer result;
+
+    public Integer getResult() {
+        return result;
+    }
+
+    public void setResult(Integer result) {
+        this.result = result;
+    }
 
     public Integer getId() {
         return id;

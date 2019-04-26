@@ -22,7 +22,7 @@ VALUES
     #{paymentType},
     #{paymentStatus},
     #{del},
-    #{userId},
+    (SELECT user.`id` FROM USER WHERE user.`name`=#{userName}),
     #{housingId},
     now()
   ) ;
@@ -60,7 +60,7 @@ WHERE `id` = #{id} ;
          UPDATE charge SET `del`=1 WHERE id=#{id}
     </update>
     <resultMap id="chargeMap" type="cn.cmmunity.beans.Charge">
-        <id column="id" property="id"/>
+        <id column="chargeId" property="id"/>
         <result column="del" property="del"/>
         <result column="housing_id" property="housingId"/>
         <result column="userid" property="userId"/>
@@ -71,12 +71,14 @@ WHERE `id` = #{id} ;
         <result column="payment_type" property="paymentType"/>
         <result column="paymentTypeName" property="paymentTypeName"/>
         <result column="payment_status" property="paymentStatus"/>
+        <result column="address" property="address"/>
+        <result column="generation_time" property="generationTime"/>
     </resultMap>
 
     <select id="getChargePage" resultMap="chargeMap">
-        SELECT charge.*,housing.`id` AS housing_id,user.`id` AS userid,user.`name` AS username,housing.`housing_name` AS housingName,paymenttype.`paymentTypeName` AS paymentTypeName
-          FROM `charge`,`user`,`housing`,`paymenttype`
-         WHERE charge.`userid`=user.`id` AND charge.`housing_id`=housing.`id` AND charge.`payment_type`=paymenttype.`id`
+        SELECT charge.*,charge.`id` AS chargeId,user.`address` AS address,housing.`id` AS housing_id,user.`id` AS userid,user.`name` AS username,housing.`housing_name` AS housingName,paymenttype.`paymentTypeName` AS paymentTypeName
+        FROM `charge`,`user`,`housing`,`paymenttype`
+        WHERE charge.`userid`=user.`id` AND charge.`housing_id`=housing.`id` AND charge.`payment_type`=paymenttype.`id`
         <if test="name!=null and name!=''">
             AND user.`name` LIKE CONCAT('%',#{name},'%')
         </if>
@@ -89,7 +91,8 @@ WHERE `id` = #{id} ;
         <if test="paymentStatus!=null">
             AND charge.`payment_status`=#{paymentStatus}
         </if>
-
+            AND charge.del=0
+        ORDER BY `generation_time` DESC
     </select>
     <select id="getChargeCount" resultType="int">
         SELECT COUNT(1)
@@ -107,12 +110,21 @@ WHERE `id` = #{id} ;
                 <if test="paymentStatus!=null">
                     AND charge.`payment_status`=#{paymentStatus}
                 </if>
+
     </select>
     <select id="getChargeById" resultMap="chargeMap">
-        SELECT *
-          FROM `charge`,`user`,`housing`,`paymenttype`
-         WHERE charge.`userid`=user.`id` AND charge.`housing_id`=housing.`id` AND charge.`payment_type`=paymenttype.`id`
+       SELECT charge.*,charge.`id` AS chargeId,user.`address` AS address,housing.`id` AS housing_id,user.`id` AS userid,user.`name` AS username,housing.`housing_name` AS housingName,paymenttype.`paymentTypeName` AS paymentTypeName
+        FROM `charge`,`user`,`housing`,`paymenttype`
+        WHERE charge.`userid`=user.`id` AND charge.`housing_id`=housing.`id` AND charge.`payment_type`=paymenttype.`id`
            AND  charge.`id`=#{id}
+    </select>
+    <select id="getAllPaymentType" resultType="cn.cmmunity.beans.PaymentType">
+        SELECT * FROM paymenttype
+    </select>
+    <select id="getUserByName" resultType="cn.cmmunity.beans.User">
+        SELECT *
+          FROM USER
+         WHERE name=#{name}
     </select>
 
 </mapper>

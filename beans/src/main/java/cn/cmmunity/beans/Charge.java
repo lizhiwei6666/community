@@ -18,6 +18,15 @@ public class Charge implements Serializable {
     private String housingName;
     private String userName;
     private Date generationTime;
+    private String address;
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
     public Date getGenerationTime() {
         return generationTime;

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="/Bootstrap/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Font Awesome -->
+    <link href="/Bootstrap/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <!--[if IE 7]>-->
+</head>
+<body>
+<div style="height: 20px"></div>
+<form class="form-horizontal"  action="/housing/updateHousing" method="post">
+    <input type="hidden" name="id" th:value="${housing.id}" >
+    <div class="form-group form-group-sm">
+        <label for="propertyCompany" class="col-sm-2 control-label">所属物业公司</label>
+        <div class="col-sm-3">
+            <input type="text" required="required" th:value="${housing.propertyCompany}" class="form-control" name="propertyCompany" id="propertyCompany"  placeholder="请输入所属物业公司">
+        </div>
+    </div>
+    <div class="form-group form-group-sm">
+        <label for="housingName" class="col-sm-2 control-label">小区名称</label>
+        <div class="col-sm-3">
+            <input type="text" required="required" th:value="${housing.housingName}" class="form-control" name="housingName" id="housingName" placeholder="请输入小区名称">
+        </div>
+    </div>
+    <div class="form-group form-group-sm">
+        <label for="housingAddress" class="col-sm-2 control-label">小区地址</label>
+        <div class="col-sm-3">
+            <input type="text" required="required" th:value="${housing.housingAddress}"  class="form-control" name="housingAddress" id="housingAddress" placeholder="请输入小区地址">
+        </div>
+    </div>
+    <div class="form-group form-group-sm">
+        <label for="housingAddress" class="col-sm-2 control-label">小区状态</label>
+        <div class="col-sm-3">
+            <!--<input type="text" required="required" th:value="${housing.housingAddress}"  class="form-control" id="housingAddress" placeholder="请输入小区地址">-->
+            <select name="status" class="form-control" >
+                <option th:selected="${housing.status==0}" value="0">正常</option>
+                <option th:selected="${housing.status==1}" value="1">异常</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group form-group-sm">
+        <div class="col-sm-offset-2 col-sm-5">
+            <button type="submit" class="btn btn-success ">修改小区</button>
+            <button type="button" onclick="back()" class="btn btn-default">返回</button>
+        </div>
+    </div>
+</form>
+<script src="/Bootstrap/ace/js/ace-extra.min.js"></script>
+<script src="/Bootstrap/ace/js/ace.min.js"></script>
+<script>
+    function back() {
+        window.history.back();
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="/Bootstrap/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Font Awesome -->
+    <link href="/Bootstrap/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <!--[if IE 7]>
+    <link href="/Content/font-awesome/css/font-awesome-ie7.min.css" rel="stylesheet" />-->
+    <style>
+        th{
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+<div style="height: 20px"></div>
+<form action="/charge/getCharge" method="post">
+    <input type="hidden" name="pageIndex" th:value="1">
+    <div class="row">
+        <div class="col-sm-2" style="display: inline-block">
+            <input type="text"  class="form-control" name="name"  th:value="${name}" placeholder="请输入户主名称查询">
+       </div>
+        <div class="col-sm-2" style="display: inline-block">
+            <select class="form-control" name="paymentStatus" style="float: left">
+                <option selected="selected" value="">请选择支付状态</option>
+                <option value="0" th:selected="${paymentStatus==0}">未支付</option>
+                <option value="1" th:selected="${paymentStatus==1}">已支付</option>
+            </select>
+        </div>
+        <div class="col-sm-2" style="display: inline-block">
+            <select class="form-control" name="housingId" style="float: left">
+                <option selected="selected" value="">请选择小区</option>
+                <option th:each="housing:${housingList}" th:selected="${housing.id==housingId}" th:value="${housing.id}" th:text="${housing.housingName}"></option>
+            </select>
+        </div>
+        <div class="col-sm-2" style="display: inline-block">
+            <select class="form-control" name="paymentTypeId" style="float: left">
+                <option selected="selected" value="">请选择缴费类型</option>
+                <option th:each="paymentType:${paymentTypeList}" th:selected="${paymentType.id==paymentTypeId}" th:value="${paymentType.id}" th:text="${paymentType.paymentTypeName}"></option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-default" style="float: left;margin-right: 5px">查询</button>
+        <a class="btn btn-info btn-group-sm" href="/charge/importEmp">导入缴费账单</a>
+        <a class="btn btn-info btn-group-sm" href="/charge/exportCharge" >导出缴费账单</a>
+        <button type="button" class="btn btn-success btn-group-sm" onclick="toadd()">添加缴费账单</button>
+    </div>
+
+    <table class="table table-hover ">
+        <tr>
+            <th>户主名称</th>
+            <th>房源地址</th>
+            <th>支付状态</th>
+            <th>缴费类型</th>
+            <th>账单生成时间</th>
+            <th>缴费金额</th>
+            <th>所属小区</th>
+            <th>缴费时间</th>
+            <th>操作</th>
+
+        </tr>
+        <tr th:each="charge:${pageInfo.getList()}">
+            <td th:text="${charge.userName}"></td>
+            <td th:text="${charge.address}"></td>
+            <td>
+                <span th:if="${charge.paymentStatus==0}">未支付</span>
+                <span th:if="${charge.paymentStatus==1}">已支付</span>
+            </td>
+            <td th:text="${charge.paymentTypeName}"></td>
+            <td th:text="${#dates.format(charge.generationTime,'yyyy-MM-dd')}"></td>
+            <td th:text="${charge.money}"></td>
+            <td th:text="${charge.housingName}"></td>
+            <td th:text="${#dates.format(charge.paymentTime,'yyyy-MM-dd')}"></td>
+            <td>
+                <button type="button" th:id="${charge.id}" th:onclick="'javascript:toupdate('+${charge.id}+');'" class="btn btn-info">修改</button>
+                <button type="button" th:onclick="'javascript:del('+${charge.id}+');'" class="btn btn-danger">删除</button>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="9">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination">
+                        <li>
+                            <a th:href="@{'javascript:page(document.forms[0],'+${pageInfo.getFirstPage()}+');'}"  aria-label="Previous">
+                                <span  aria-hidden="true">首页</span>
+                            </a>
+                        </li>
+                        <li th:class="${pageInfo.getPageNum()>1}? '':'disabled'">
+                            <a th:href="@{'javascript:page(document.forms[0],'+${pageInfo.getPrePage()}+');'}"  aria-label="Previous">
+                                <span  aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+
+                        <li th:if="${pageInfo.getNavigateLastPage()!=0}" th:each="iterStat : ${#numbers.sequence(1,pageInfo.getNavigateLastPage())}">
+                            <a th:class="${pageInfo.getPageNum()==iterStat}? 'active':'' " th:href="@{'javascript:page(document.forms[0],'+${iterStat}+');'}" th:text="${iterStat}"></a>
+                        </li>
+                        <li th:class="${pageInfo.getPageNum()<pageInfo.getNavigateLastPage()}? '':'disabled'">
+                            <a th:href="@{'javascript:page(document.forms[0],'+${pageInfo.getNextPage()}+');'}"  aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a th:href="@{'javascript:page(document.forms[0],'+${pageInfo.getLastPage()}+');'}"  aria-label="Previous">
+                                <span  aria-hidden="true">尾页</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </td>
+        </tr>
+    </table>
+</form>
+<script type="text/javascript" src="/Bootstrap/jquery.min.js"></script>
+<script>
+    function del(id) {
+        if(confirm('确定要删除缴费账单吗？')){
+            $.ajax({
+                url:"/charge/delCharge/"+id,
+                type:"DELETE",
+                dataType:'json',
+                success:function (data) {
+                    if(data.result=="true"){
+                        alert('删除成功！');
+                        $("#"+id).parent().parent().remove();
+                    }else{
+                        alert('删除失败！');
+                    }
+                }
+
+            })
+        }
+
+    }
+    function toupdate(id) {
+        window.location.href='/charge/toUpdateCharge/'+id;
+    }
+    function page(frm,pageNum) {
+        frm.pageIndex.value=pageNum;
+        frm.submit();
+    }
+    function toadd() {
+        window.location.href='/charge/toAddCharge';
+    }
+
+</script>
+<script src="/Bootstrap/ace/js/ace-extra.min.js"></script>
+<script src="/Bootstrap/ace/js/ace.min.js"></script>
+</body>
+</html>
