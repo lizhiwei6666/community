@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,12 +26,19 @@ public class ChargeController {
     ChargeService chargeService;
     @Autowired
     HousingService housingService;
-    @RequestMapping(value = "/importEmp", method = RequestMethod.POST)
+    @RequestMapping(value = "/importCharge", method = RequestMethod.POST)
     @ResponseBody
     public Object importEmp(MultipartFile file) {
-
-        return "";
+        List<String> paymentStatusList=new ArrayList<>();
+        paymentStatusList.add("未支付");
+        paymentStatusList.add("已支付");
+        List<Charge> emps = PoiUtils.importEmp2List(file,chargeService.getAllPaymentType(),paymentStatusList);
+        if (chargeService.addCharges(emps) == emps.size()) {
+            return "<scritp>alert('导入成功!');</script>";
+        }
+        return "<scritp>alert('导入失败!');</script>";
     }
+
 
     @RequestMapping(value = "/exportCharge", method = RequestMethod.GET)
     public ResponseEntity<byte[]> exportEmp() {

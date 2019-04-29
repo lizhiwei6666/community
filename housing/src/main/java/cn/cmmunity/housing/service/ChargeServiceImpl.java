@@ -56,4 +56,9 @@ public class ChargeServiceImpl implements ChargeService {
     public User getUserByName(String name) {
         return chargeMapper.getUserByName(name);
     }
+
+    @Override
+    public int addCharges(List<Charge> chargeList) {
+        return chargeMapper.addCharges(chargeList);
+    }
 }

@@ -17,4 +17,5 @@ public interface ChargeService {
     Charge getChargeById(Integer id);
     List<PaymentType> getAllPaymentType();
     User getUserByName(String name);
+    int addCharges(List<Charge> chargeList);
 }

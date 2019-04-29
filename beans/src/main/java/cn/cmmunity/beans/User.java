@@ -1,12 +1,18 @@
 package cn.cmmunity.beans;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
  * 业主表
  */
-public class User implements Serializable {
+public class User implements UserDetails {
     private Integer id;
     private String username;
     private String phone;
@@ -15,11 +21,54 @@ public class User implements Serializable {
     private Integer del;
     private String password;
     private String name;
-    private Integer activation;
+  /*  private Integer activation;*/
     private Integer housingId;
     private List<Repair> repairList;
+    private Boolean enabled;
+    private Boolean locked;
+    private List<Role> roles;
+    private String gender;
 
+    public String getGender() {
+        return gender;
+    }
 
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
+    @Override
+    public String getUsername() {
+        return username;
+    }
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        for (Role role : roles) {
+            authorities.add(new SimpleGrantedAuthority(role.getName()));
+        }
+        return authorities;
+    }
+    @Override
+    public String getPassword() {
+        return password;
+    }
 
     public List<Repair> getRepairList() {
         return repairList;
@@ -28,16 +77,13 @@ public class User implements Serializable {
     public void setRepairList(List<Repair> repairList) {
         this.repairList = repairList;
     }
+
     public Integer getId() {
         return id;
     }
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
     }
 
     public void setUsername(String username) {
@@ -76,10 +122,6 @@ public class User implements Serializable {
         this.del = del;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
     public void setPassword(String password) {
         this.password = password;
     }
@@ -92,13 +134,13 @@ public class User implements Serializable {
         this.name = name;
     }
 
-    public Integer getActivation() {
+   /* public Integer getActivation() {
         return activation;
     }
 
     public void setActivation(Integer activation) {
         this.activation = activation;
-    }
+    }*/
 
     public Integer getHousingId() {
         return housingId;
@@ -108,19 +150,11 @@ public class User implements Serializable {
         this.housingId = housingId;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", phone='" + phone + '\'' +
-                ", address='" + address + '\'' +
-                ", remark='" + remark + '\'' +
-                ", del=" + del +
-                ", password='" + password + '\'' +
-                ", name='" + name + '\'' +
-                ", activation=" + activation +
-                ", housingId=" + housingId +
-                '}';
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 }

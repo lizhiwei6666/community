@@ -1,6 +1,8 @@
 package cn.cmmunity.housing.utils;
 
 import cn.cmmunity.beans.Charge;
+import cn.cmmunity.beans.PaymentType;
+import com.alibaba.druid.sql.visitor.functions.Char;
 import org.apache.poi.hpsf.DocumentSummaryInformation;
 import org.apache.poi.hpsf.SummaryInformation;
 import org.apache.poi.hssf.usermodel.*;
@@ -114,6 +116,84 @@ public class PoiUtils {
             e.printStackTrace();
         }
         return new ResponseEntity<byte[]>(baos.toByteArray(), headers, HttpStatus.CREATED);
+    }
+    public static List<Charge> importEmp2List(MultipartFile file,
+                                              List<PaymentType> paymentTypeList,
+                                              List<String> paymentStatusList){
+        List<Charge> chargeList=new ArrayList<>();
+
+        try {
+            HSSFWorkbook workbook =
+                    new HSSFWorkbook(new POIFSFileSystem(file.getInputStream()));
+            int numberOfSheets = workbook.getNumberOfSheets();
+            for (int i = 0; i < numberOfSheets; i++) {
+                HSSFSheet sheet = workbook.getSheetAt(i);
+                int physicalNumberOfRows = sheet.getPhysicalNumberOfRows();
+                Charge charge;
+                for (int j = 0; j < physicalNumberOfRows; j++) {
+                    if (j == 0) {
+                        continue;//标题行
+                    }
+                    HSSFRow row = sheet.getRow(j);
+                    if (row == null) {
+                        continue;//没数据
+                    }
+                    int physicalNumberOfCells = row.getPhysicalNumberOfCells();
+                    charge = new Charge();
+                    for (int k = 0; k < physicalNumberOfCells; k++) {
+                        HSSFCell cell = row.getCell(k);
+                        switch (cell.getCellTypeEnum()) {
+                            case STRING: {
+                                String cellValue = cell.getStringCellValue();
+                                if (cellValue == null) {
+                                    cellValue = "";
+                                }
+                                switch (k) {
+                                    case 1:
+                                        charge.setUserName(cellValue);
+                                        break;
+                                    case 2:
+
+                                        charge.setAddress(cellValue);
+                                        break;
+                                    case 3:
+                                        Integer status=paymentStatusList.indexOf(cellValue);
+                                        charge.setPaymentStatus(status);
+                                        break;
+                                    case 4:
+                                        int payType=paymentTypeList.indexOf(cellValue);
+                                        charge.setPaymentType(paymentTypeList.get(payType).getId());
+                                        break;
+                                    case 7:
+                                        charge.setHousingName(cellValue);
+                                        break;
+                                }
+                            }
+                            break;
+                            default: {
+                                switch (k) {
+                                    case 5:
+                                        charge.setGenerationTime(cell.getDateCellValue());
+                                        break;
+                                    case 6:
+                                        charge.setMoney(cell.getNumericCellValue());
+                                        break;
+                                    case 8:
+                                        charge.setPaymentTime(cell.getDateCellValue());
+                                        break;
+
+                                }
+                            }
+                            break;
+                        }
+                    }
+                    chargeList.add(charge);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return  chargeList;
     }
 
 

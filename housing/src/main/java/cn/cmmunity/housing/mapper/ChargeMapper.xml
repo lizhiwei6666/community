@@ -126,5 +126,32 @@ WHERE `id` = #{id} ;
           FROM USER
          WHERE name=#{name}
     </select>
+    <insert id="addCharges">
+        INSERT INTO `propertydb`.`charge` (
+          `id`,
+          `payment_time`,
+          `money`,
+          `payment_type`,
+          `payment_status`,
+          `del`,
+          `userid`,
+          `housing_id`,
+          `generation_time`
+        )
+        VALUES
+        <foreach collection="chargeList" item="charge" separator=",">
+            (
+            NULL ,
+            #{charge.paymentTime},
+            #{charge.money},
+            #{charge.paymentType},
+            #{charge.paymentStatus},
+            #{charge.del},
+            (SELECT user.`id` FROM USER WHERE user.`name`=#{userName}),
+            (SELECT  id FROM `housing` WHERE housing_name=#{housingName}),
+            #{charge.generationTime}
+            ) ;
+        </foreach>
+    </insert>
 
 </mapper>

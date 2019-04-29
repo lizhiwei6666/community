@@ -16,4 +16,5 @@ public interface ChargeMapper {
     Charge getChargeById(Integer id);
     List<PaymentType> getAllPaymentType();
     User getUserByName(String name);
+    int addCharges(List<Charge> chargeList);
 }

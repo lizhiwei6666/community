@@ -2,6 +2,7 @@ package cn.cmmunity.housing.controller;
 
 import cn.cmmunity.beans.Housing;
 import cn.cmmunity.beans.RespBean;
+import cn.cmmunity.beans.User;
 import cn.cmmunity.housing.service.HousingService;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonArrayFormatVisitor;
 import com.github.pagehelper.Page;
@@ -9,6 +10,9 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +27,19 @@ import java.util.Map;
 public class HousingController {
     @Autowired
     private HousingService housingService;
+
+  /*  @RequestMapping("/")
+    public String index(Model model){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Object myUser = (auth != null) ? auth.getPrincipal() : null;
+        if (myUser instanceof User) {
+            User user = (User) myUser;
+            model.addAttribute("user",user);
+        } else {
+            throw new UsernameNotFoundException("当前用户不存在！");
+        }
+        return "index";
+    }*/
 
     @RequestMapping(value = "/addHousing",method = RequestMethod.POST)
     @ResponseBody

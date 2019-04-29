@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="/Bootstrap/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Font Awesome -->
+    <link href="/Bootstrap/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <!--[if IE 7]>
+    <link href="/Content/font-awesome/css/font-awesome-ie7.min.css" rel="stylesheet" />-->
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <style>
+        body{
+            margin-left:auto;
+            margin-right:auto;
+            margin-TOP:200PX;
+            width:20em;
+        }
+
+    </style>
+</head>
+<body>
+<form action="/login" method="post">
+    <div class="input-group input-group-lg" style="margin-bottom: 10px">
+        <span class="input-group-addon" id="basic-addon1">@</span>
+        <input type="text" class="form-control" name="username" placeholder="请输入用户名" aria-describedby="basic-addon1">
+    </div>
+    <div class="input-group input-group-lg" style="margin-bottom: 10px">
+        <span class="input-group-addon" id="basic-addon2">@</span>
+        <input type="password" class="form-control" name="password" placeholder="请输入密码" aria-describedby="basic-addon2">
+    </div>
+  <!--  <select class="form-control" style="margin-bottom: 10px">
+        <option value="">请选择您的身份</option>
+        <option value="1">系统管理员</option>
+        <option value="2">小区管理员</option>
+    </select>-->
+    <p>
+        <button type="submit" style="width:300px;margin-bottom: 5px"  class="btn btn-info btn-lg">登录</button>
+        <a href="" data-toggle="modal" data-target="#register" >还没有账号？点我注册</a>
+    </p>
+</form>
+<!-- 注册窗口 -->
+     <div id="register" class="modal fade" tabindex="-1">
+             <div class="modal-dialog">
+                 <div class="modal-content">
+                     <div class="modal-body">
+                         <button class="close" data-dismiss="modal">
+                             <span>&times;</span>
+                         </button>
+                     </div>
+                     <div class="modal-title">
+                         <h1 class="text-center">注册</h1>
+                     </div>
+                     <div class="modal-body">
+                         <form class="form-group" action="">
+                                 <div class="form-group">
+                                     <label for="">真实姓名</label>
+                                     <input class="form-control" type="text" name="name" placeholder="请输入真实姓名">
+                                 </div>
+                                 <div class="form-group">
+                                     <label for="">用户名</label>
+                                     <input class="form-control" type="text" name="username" placeholder="6-15位字母或数字">
+                                 </div>
+                                 <div class="form-group">
+                                     <label for="">密码</label>
+                                     <input class="form-control" type="password" name="password" placeholder="至少6位字母或数字">
+                                 </div>
+                                 <div class="form-group">
+                                     <label for="">再次输入密码</label>
+                                     <input class="form-control" type="password" name="rpassword" placeholder="至少6位字母或数字">
+                                 </div>
+                                 <div class="form-group">
+                                     <label for="">邮箱</label>
+                                     <input class="form-control" type="email" placeholder="例如:123@123.com">
+                                 </div>
+                                 <div class="form-group">
+                                     <label for="">地址</label>
+                                     <input class="form-control" type="text" name="address" placeholder="请输入您的地址">
+                                 </div>
+                                 <div class="form-group">
+                                     <label for="">性别</label>
+                                     <label class="radio-inline">
+                                         <input  type="radio" name="gender" value="男" checked="checked">男
+                                     </label>
+                                     <label class="radio-inline">
+                                         <input  type="radio" name="gender" value="女" >女
+                                     </label>
+                                 </div>
+                                     <div class="text-right">
+                                     <button class="btn btn-primary" type="submit">提交</button>
+                                     <button class="btn btn-danger" data-dismiss="modal">取消</button>
+                                 </div>
+                                 <a href="" data-toggle="modal" data-dismiss="modal" data-target="#login">已有账号？点我登录</a>
+                         </form>
+                     </div>
+                 </div>
+             </div>
+         </div>
+</body>
+</html>
